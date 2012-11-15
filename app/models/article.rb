@@ -10,13 +10,6 @@ class Article < ActiveRecord::Base
   validate :title_long_enough
 
   def self.sort(params)
-    # if params[:order_by] == nil
-    #       self.only(params[:max])
-    #     elsif params[:max] == nil
-    #       self.order_by(params[:order_by])
-    #     else
-    #       Article.find(:all, :order => params[:order_by], :limit => params[:max])
-    #     end
     Article.find(:all, :order => self.order_by(params[:order_by]), :limit => params[:max])
   end
 
@@ -35,11 +28,6 @@ class Article < ActiveRecord::Base
     when '2'  then Article.all(:limit => 2)
     else               Article.all
     end
-  end
-
-  def self.only(params)
-    # self.limit(param)
-    Article.find(:all, :limit => params[:max])
   end
 
   private

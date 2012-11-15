@@ -3,18 +3,15 @@ class ArticlesController < ApplicationController
   # GET /articles.json
 
   before_filter :load_article
-  # before_filter :uppercase, :only => :index
-  # around_filter :handle_errors
+  before_filter :uppercase, :only => :index
+  around_filter :handle_errors
 
   def index
     puts params
-    puts "------------------------------------------------"
     if params[:order_by]
-      @articles = Article.order_by(params[:order_by])#.each { |article| article.title.upcase! }
+      @articles = Article.order_by(params[:order_by]).each { |article| article.title.upcase! }
     else
-      puts "------------------------------------------------"
-      puts params[:limit]
-      @articles = Article.limit(params[:limit])#.each { |article| article.title.upcase! }
+      @articles = Article.limit(params[:limit]).each { |article| article.title.upcase! }
     end
     respond_to do |format|
       format.html # index.html.erb
@@ -46,7 +43,6 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
-    # @article = Article.find(params[:id])
   end
 
   # POST /articles
@@ -69,8 +65,6 @@ class ArticlesController < ApplicationController
   # PUT /articles/1
   # PUT /articles/1.json
   def update
-    # @article = Article.find(params[:id])
-
     respond_to do |format|
       if @article.update_attributes(params[:article])
         format.html { redirect_to @article, notice: 'Article was successfully updated.' }
@@ -85,7 +79,6 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
-    # @article = Article.find(params[:id])
     @article.destroy
 
     respond_to do |format|
