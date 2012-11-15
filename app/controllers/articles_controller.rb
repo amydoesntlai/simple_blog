@@ -3,10 +3,19 @@ class ArticlesController < ApplicationController
   # GET /articles.json
 
   before_filter :load_article
-  before_filter :uppercase, :only => :index
-  around_filter :handle_errors
+  # before_filter :uppercase, :only => :index
+  # around_filter :handle_errors
 
   def index
+    puts params
+    puts "------------------------------------------------"
+    if params[:order_by]
+      @articles = Article.order_by(params[:order_by])#.each { |article| article.title.upcase! }
+    else
+      puts "------------------------------------------------"
+      puts params[:limit]
+      @articles = Article.limit(params[:limit])#.each { |article| article.title.upcase! }
+    end
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @articles }
@@ -43,7 +52,8 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
-    @article = Article.new(params[:article])
+    @article = Article.new(:title => params[:article][:title],
+                           :body => params[:article][:body])
 
     respond_to do |format|
       if @article.save
@@ -87,10 +97,6 @@ class ArticlesController < ApplicationController
   private
   def load_article
     @article = Article.find(params[:id]) if params[:id]
-  end
-
-  def uppercase
-    @articles = Article.all.each { |article| article.title.upcase! }
   end
 
   def handle_errors
