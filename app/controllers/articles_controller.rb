@@ -48,8 +48,7 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
-    @article = Article.new(:title => params[:article][:title],
-                           :body => params[:article][:body])
+    @article = Article.new(params[:article])
 
     respond_to do |format|
       if @article.save
@@ -103,6 +102,10 @@ class ArticlesController < ApplicationController
         redirect_to articles_path
       end
     end
+  end
+
+  def uppercase
+    @articles = Article.all.each { |article| article.title.upcase! }
   end
 
 end
